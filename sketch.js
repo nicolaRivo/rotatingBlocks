@@ -3,8 +3,8 @@
 ===============================*/
 const mouseDist = 200;       // Mouse activation radius
 let cols, rows;              // Grid dimensions
-const hSize = 35;            // Block horizontal size
-const vSize = 5;            // Block vertical size
+const hSizeBase = 5;            // Block horizontal size
+const vSizeBase = 5;             // Block horizontal size
 let blocks = [];             // 2D array to store blocks
 
 // Mode settings
@@ -13,6 +13,10 @@ let independentHueShift = false;   // Toggle for independent hue shift
 let hueShiftType = 'lfo';          // 'lfo' or 'noise'
 let mouseHandler ;
 let blockManager;
+
+//set actual size of the blocks by randomization
+let hSize = hSizeBase * (1 + Math.floor(Math.random() * 9));
+let vSize = vSizeBase * (1 + Math.floor(Math.random() * 9));
 /*==============================
         SETUP FUNCTION
   Initializes canvas and creates
@@ -20,17 +24,23 @@ let blockManager;
 ===============================*/
 
 function setup() {
+  
+  Config.CANVAS.WIDTH = Math.floor(windowWidth / 5) * 5;
+  Config.CANVAS.HEIGHT = Math.floor(windowHeight / 5) * 5;
+  
   createCanvas(Config.CANVAS.WIDTH, Config.CANVAS.HEIGHT);
   rectMode(CENTER);
   angleMode(DEGREES);
   colorMode(HSL, 360, 100, 100);
-  
+
   // Initialize handlers with configuration
   mouseHandler = new MouseHandler(Config);
   blockManager = new BlockManager(Config);
   
   // Create grid of blocks
   blockManager.initialize(width, height, vSize, hSize);
+  
+
   
   console.log("Controls:", 
     "\nC - Toggle clockwise return", 
@@ -39,6 +49,19 @@ function setup() {
     "\nN - Use Noise for hue shift",
     "\n1-9 - Set cursor size"
   );
+}
+
+// Handle window resizing
+function windowResized() {
+  // Update config with new dimensions (multiples of 5)
+  Config.CANVAS.WIDTH = Math.floor(windowWidth / 5) * 5;
+  Config.CANVAS.HEIGHT = Math.floor(windowHeight / 5) * 5;
+  
+  // Resize the canvas
+  resizeCanvas(Config.CANVAS.WIDTH, Config.CANVAS.HEIGHT);
+  
+  // Reinitialize the block grid with new dimensions
+  blockManager.initialize(width, height, vSize, hSize);
 }
 
 function draw() {
@@ -90,11 +113,14 @@ function displayModeInfo() {
     `Clockwise Return: ${settings.clockwiseReturn ? 'ON' : 'OFF'} (C)`,
     `Independent Hue Shift: ${settings.independentHueShift ? 'ON' : 'OFF'} (H)`,
     `Shift Type: ${settings.hueShiftType.toUpperCase()} (L/N)`,
-    `Cursor Size: ${mouseHandler.cursorSize} (1-9)`
+    `Cursor Size: ${mouseHandler.cursorSize} (1-9)`,
+    "Random Size:",
+    `Height: ${hSize}, Width: ${vSize}`
+    
   ];
   
   for (let i = 0; i < infoText.length; i++) {
-    text(infoText[i], 20, height - 80 + (i * 20));
+    text(infoText[i], 20, height - 200 + (i * 20));
   }
   pop();
 }

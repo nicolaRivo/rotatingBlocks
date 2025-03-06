@@ -4,7 +4,7 @@ class MouseHandler {
     this.config = config;
     this.position = createVector(0, 0);
     this.prevPosition = createVector(0, 0);
-    this.cursorSize = 1;
+    this.cursorSize = 4;
     this.baseRadius = config.BLOCK.ACTIVATION_RADIUS;
   }
   

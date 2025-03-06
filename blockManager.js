@@ -7,12 +7,15 @@ class BlockManager {
     this.rows = 0;
     this.settings = {
       clockwiseReturn: true,
-      independentHueShift: false,
+      independentHueShift: Math.floor(Math.random() * 2) == 1 ? true : false,
+      //independentHueShift:false,
       hueShiftType: 'lfo'
     };
   }
+  
 
   initialize(width, height, vSize, hSize) {
+    console.log(this.settings.independentHueShift)
     this.cols = Math.floor(width / vSize);
     this.rows = Math.floor(height / hSize);
     

@@ -17,7 +17,7 @@ class Block {
     
     // MODE SETTINGS
     this.clockwiseReturnOnly = true;
-    this.independentHueShift = false;
+    this.independentHueShift = Math.floor(Math.random() * 2) == 1 ? true : false;
     this.hueShiftType = 'lfo';
     
     // LFO PROPERTIES
